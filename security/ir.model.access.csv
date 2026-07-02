@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_template_custom_value,product.template.custom.value,model_product_template_custom_value,base.group_user,1,1,1,1
+access_product_attribute_set,product.attribute.set,model_product_attribute_set,base.group_user,1,1,1,1
+access_product_attribute_set_line,product.attribute.set.line,model_product_attribute_set_line,base.group_user,1,1,1,1
+

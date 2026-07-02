@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Product Attribute Set: Form View -->
+    <record id="product_attribute_set_view_form" model="ir.ui.view">
+        <field name="name">product.attribute.set.form</field>
+        <field name="model">product.attribute.set</field>
+        <field name="arch" type="xml">
+            <form string="Product Attribute Set">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Electronics Specifications"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page string="Attributes" name="attributes">
+                            <field name="attribute_line_ids">
+                                <list editable="bottom">
+                                    <field name="attribute_id"/>
+                                    <field name="value_type" column_invisible="True"/>
+                                    <field name="display_value" widget="dynamic_attribute_value"/>
+                                    <!-- Hidden EAV fields for OWL widget storage -->
+                                    <field name="value_text" column_invisible="True"/>
+                                    <field name="value_integer" column_invisible="True"/>
+                                    <field name="value_float" column_invisible="True"/>
+                                    <field name="value_date" column_invisible="True"/>
+                                    <field name="value_boolean" column_invisible="True"/>
+                                    <field name="value_selection_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Product Attribute Set: List View -->
+    <record id="product_attribute_set_view_tree" model="ir.ui.view">
+        <field name="name">product.attribute.set.list</field>
+        <field name="model">product.attribute.set</field>
+        <field name="arch" type="xml">
+            <list string="Product Attribute Sets">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Product Attribute Set: Action -->
+    <record id="product_attribute_set_action" model="ir.actions.act_window">
+        <field name="name">Attribute Sets</field>
+        <field name="res_model">product.attribute.set</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Product Attribute Set: Menu -->
+    <menuitem id="menu_product_attribute_set_action"
+              action="product_attribute_set_action"
+              parent="product.menu_attribute_action"
+              sequence="20"/>
+</odoo>

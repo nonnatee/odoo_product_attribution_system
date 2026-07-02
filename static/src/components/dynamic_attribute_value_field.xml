@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odoo_product_attribution_system.DynamicAttributeValueField">
+        <!-- Readonly mode: display computed text -->
+        <t t-if="isReadonly">
+            <span t-esc="displayValue"/>
+        </t>
+
+        <!-- Edit mode: render type-appropriate input -->
+        <t t-else="">
+
+            <!-- Text -->
+            <t t-if="valueType === 'text'">
+                <input type="text"
+                       class="o_input"
+                       t-att-value="textValue"
+                       t-on-change="onTextChange"/>
+            </t>
+
+            <!-- Integer -->
+            <t t-elif="valueType === 'integer'">
+                <input type="number"
+                       step="1"
+                       class="o_input"
+                       t-att-value="integerValue"
+                       t-on-change="onIntegerChange"/>
+            </t>
+
+            <!-- Float -->
+            <t t-elif="valueType === 'float'">
+                <input type="number"
+                       step="any"
+                       class="o_input"
+                       t-att-value="floatValue"
+                       t-on-change="onFloatChange"/>
+            </t>
+
+            <!-- Date -->
+            <t t-elif="valueType === 'date'">
+                <input type="date"
+                       class="o_input"
+                       t-att-value="dateValue"
+                       t-on-change="onDateChange"/>
+            </t>
+
+            <!-- Boolean -->
+            <t t-elif="valueType === 'boolean'">
+                <input type="checkbox"
+                       class="form-check-input"
+                       t-att-checked="booleanValue"
+                       t-on-change="onBooleanChange"/>
+            </t>
+
+            <!-- Selection -->
+            <t t-elif="valueType === 'selection'">
+                <select class="o_input"
+                        t-on-change="onSelectionChange">
+                    <option value="">-- Select --</option>
+                    <t t-foreach="selectionOptions" t-as="option" t-key="option.id">
+                        <option t-att-value="option.id"
+                                t-att-selected="option.id === selectionValue">
+                            <t t-esc="option.name"/>
+                        </option>
+                    </t>
+                </select>
+            </t>
+
+            <!-- Fallback for unknown type -->
+            <t t-else="">
+                <input type="text"
+                       class="o_input"
+                       t-att-value="displayValue"
+                       t-on-change="onTextChange"/>
+            </t>
+
+        </t>
+    </t>
+</templates>

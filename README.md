@@ -41,12 +41,33 @@ A professional and robust Odoo module implementing a dynamic, category-based att
 
 ---
 
+## 📖 Documentation
+
+Detailed documentation is organized as follows:
+
+### 👤 User & Configuration Guides
+* **[User Guide Index](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user_guide.md)**: Main entry point for administrators and operators.
+* **[Attributes & Sets Setup](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/attributes_and_sets.md)**: Managing attributes, value types, sets, and CSV imports.
+* **[Category Configuration](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/category_configuration.md)**: Linking attributes to categories, inheritance, and imports.
+* **[Product Template Management](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/product_management.md)**: Editing product specs tab, widget usages, and search filterings.
+
+### 💻 Developer & Technical Documentation
+* **[Technical Documentation Index](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/TECHNICAL_DOCUMENTATION.md)**: System design and high-level architecture diagram.
+* **[Architecture & Traversal Logic](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/architecture.md)**: Traversal code flows, cache handling, and cyclic prevention.
+* **[Data Models & EAV Schema](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/models.md)**: Database schema relationships and default resolution logic.
+* **[OWL Widget Component](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/owl_widget.md)**: Dynamic widget structure, templates, events, and writebacks.
+* **[Testing & Coverage Guide](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/testing.md)**: Test coverage tiers, Happy/Edge cases, and execution commands.
+
+---
+
 ## 📁 Repository Structure
 
 ```text
 odoo_product_attribution_system/
 ├── __init__.py
-├── __manifest__.py                 # Module manifest and dependencies
+├── __manifest__.py                 # Module manifest and dependencies (depends on product & sale)
+├── TECHNICAL_DOCUMENTATION.md     # Main developer overview and high-level system diagram
+├── docs/                           # Specialized guides for traversal, EAV schema, OWL, and tests
 ├── models/
 │   ├── __init__.py
 │   ├── product_attribute.py        # Adds value_type selection to attributes

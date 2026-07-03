@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ========================================== -->
+        <!-- 1. Product Attributes & Options -->
+        <!-- ========================================== -->
+
+        <!-- Material (Building) -->
+        <record id="demo_attr_material" model="product.attribute">
+            <field name="name">Material (Home Improvement)</field>
+            <field name="value_type">selection</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <record id="demo_val_material_wood" model="product.attribute.value">
+            <field name="name">Wood</field>
+            <field name="attribute_id" ref="demo_attr_material"/>
+        </record>
+        <record id="demo_val_material_steel" model="product.attribute.value">
+            <field name="name">Steel</field>
+            <field name="attribute_id" ref="demo_attr_material"/>
+        </record>
+        <record id="demo_val_material_pvc" model="product.attribute.value">
+            <field name="name">PVC</field>
+            <field name="attribute_id" ref="demo_attr_material"/>
+        </record>
+        <record id="demo_val_material_concrete" model="product.attribute.value">
+            <field name="name">Concrete</field>
+            <field name="attribute_id" ref="demo_attr_material"/>
+        </record>
+
+        <!-- Dimensions (Building) -->
+        <record id="demo_attr_dimensions" model="product.attribute">
+            <field name="name">Dimensions</field>
+            <field name="value_type">text</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Outdoor Approved (Building) -->
+        <record id="demo_attr_outdoor" model="product.attribute">
+            <field name="name">Outdoor Approved</field>
+            <field name="value_type">boolean</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Power Source (Hardware) -->
+        <record id="demo_attr_power_source" model="product.attribute">
+            <field name="name">Power Source</field>
+            <field name="value_type">selection</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <record id="demo_val_power_corded" model="product.attribute.value">
+            <field name="name">Corded Electric</field>
+            <field name="attribute_id" ref="demo_attr_power_source"/>
+        </record>
+        <record id="demo_val_power_battery" model="product.attribute.value">
+            <field name="name">Battery (Cordless)</field>
+            <field name="attribute_id" ref="demo_attr_power_source"/>
+        </record>
+        <record id="demo_val_power_manual" model="product.attribute.value">
+            <field name="name">Manual (Hand Tool)</field>
+            <field name="attribute_id" ref="demo_attr_power_source"/>
+        </record>
+
+        <!-- Voltage (Hardware) -->
+        <record id="demo_attr_voltage" model="product.attribute">
+            <field name="name">Voltage (V)</field>
+            <field name="value_type">integer</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Warranty Period (Hardware) -->
+        <record id="demo_attr_warranty" model="product.attribute">
+            <field name="name">Warranty Period (Years)</field>
+            <field name="value_type">integer</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Diameter (Plumbing) -->
+        <record id="demo_attr_diameter" model="product.attribute">
+            <field name="name">Diameter (Inches)</field>
+            <field name="value_type">float</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Max Pressure (Plumbing) -->
+        <record id="demo_attr_pressure" model="product.attribute">
+            <field name="name">Max Pressure (PSI)</field>
+            <field name="value_type">integer</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Lead Free (Plumbing) -->
+        <record id="demo_attr_lead_free" model="product.attribute">
+            <field name="name">Lead Free Certification</field>
+            <field name="value_type">boolean</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Wholesale Packaging Type (Logistics) -->
+        <record id="demo_attr_packaging_type" model="product.attribute">
+            <field name="name">Wholesale Packaging Type</field>
+            <field name="value_type">selection</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <record id="demo_val_pack_pallet" model="product.attribute.value">
+            <field name="name">Standard Pallet</field>
+            <field name="attribute_id" ref="demo_attr_packaging_type"/>
+        </record>
+        <record id="demo_val_pack_carton" model="product.attribute.value">
+            <field name="name">Bulk Carton</field>
+            <field name="attribute_id" ref="demo_attr_packaging_type"/>
+        </record>
+        <record id="demo_val_pack_crate" model="product.attribute.value">
+            <field name="name">Wooden Crate</field>
+            <field name="attribute_id" ref="demo_attr_packaging_type"/>
+        </record>
+        <record id="demo_val_pack_bag" model="product.attribute.value">
+            <field name="name">Super Sack / Bulk Bag</field>
+            <field name="attribute_id" ref="demo_attr_packaging_type"/>
+        </record>
+
+        <!-- Items per Pack (Logistics) -->
+        <record id="demo_attr_pack_qty" model="product.attribute">
+            <field name="name">Items Per Pack (Bulk Quantity)</field>
+            <field name="value_type">integer</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <!-- Hazmat Class (Logistics) -->
+        <record id="demo_attr_hazmat" model="product.attribute">
+            <field name="name">Hazmat Hazard Class</field>
+            <field name="value_type">selection</field>
+            <field name="create_variant">no_variant</field>
+        </record>
+
+        <record id="demo_val_hazmat_none" model="product.attribute.value">
+            <field name="name">Non-Hazardous Material</field>
+            <field name="attribute_id" ref="demo_attr_hazmat"/>
+        </record>
+        <record id="demo_val_hazmat_flammable" model="product.attribute.value">
+            <field name="name">Class 3 Flammable Liquid</field>
+            <field name="attribute_id" ref="demo_attr_hazmat"/>
+        </record>
+        <record id="demo_val_hazmat_corrosive" model="product.attribute.value">
+            <field name="name">Class 8 Corrosive Material</field>
+            <field name="attribute_id" ref="demo_attr_hazmat"/>
+        </record>
+        <record id="demo_val_hazmat_toxic" model="product.attribute.value">
+            <field name="name">Class 6.1 Toxic Substances</field>
+            <field name="attribute_id" ref="demo_attr_hazmat"/>
+        </record>
+
+        <!-- ========================================== -->
+        <!-- 2. Product Attribute Sets & Lines -->
+        <!-- ========================================== -->
+
+        <!-- Tools / Hardware Set -->
+        <record id="demo_set_hardware" model="product.attribute.set">
+            <field name="name">Hardware Tool Specs</field>
+        </record>
+
+        <record id="demo_set_hardware_line_power" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_hardware"/>
+            <field name="attribute_id" ref="demo_attr_power_source"/>
+            <field name="value_selection_id" ref="demo_val_power_battery"/>
+        </record>
+        <record id="demo_set_hardware_line_voltage" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_hardware"/>
+            <field name="attribute_id" ref="demo_attr_voltage"/>
+            <field name="value_integer">18</field>
+        </record>
+        <record id="demo_set_hardware_line_warranty" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_hardware"/>
+            <field name="attribute_id" ref="demo_attr_warranty"/>
+            <field name="value_integer">2</field>
+        </record>
+
+        <!-- Plumbing Set -->
+        <record id="demo_set_plumbing" model="product.attribute.set">
+            <field name="name">Plumbing System Specs</field>
+        </record>
+
+        <record id="demo_set_plumbing_line_diameter" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_plumbing"/>
+            <field name="attribute_id" ref="demo_attr_diameter"/>
+            <field name="value_float">2.0</field>
+        </record>
+        <record id="demo_set_plumbing_line_pressure" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_plumbing"/>
+            <field name="attribute_id" ref="demo_attr_pressure"/>
+            <field name="value_integer">150</field>
+        </record>
+        <record id="demo_set_plumbing_line_lead_free" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_plumbing"/>
+            <field name="attribute_id" ref="demo_attr_lead_free"/>
+            <field name="value_boolean">True</field>
+        </record>
+
+        <!-- Logistics / Packaging Set -->
+        <record id="demo_set_logistics" model="product.attribute.set">
+            <field name="name">Logistics &amp; Packaging Specs</field>
+        </record>
+
+        <record id="demo_set_logistics_line_pack" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_logistics"/>
+            <field name="attribute_id" ref="demo_attr_packaging_type"/>
+            <field name="value_selection_id" ref="demo_val_pack_pallet"/>
+        </record>
+        <record id="demo_set_logistics_line_qty" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_logistics"/>
+            <field name="attribute_id" ref="demo_attr_pack_qty"/>
+            <field name="value_integer">100</field>
+        </record>
+        <record id="demo_set_logistics_line_hazmat" model="product.attribute.set.line">
+            <field name="set_id" ref="demo_set_logistics"/>
+            <field name="attribute_id" ref="demo_attr_hazmat"/>
+            <field name="value_selection_id" ref="demo_val_hazmat_none"/>
+        </record>
+
+        <!-- ========================================== -->
+        <!-- 3. Product Categories -->
+        <!-- ========================================== -->
+
+        <!-- Root Category: Wholesale Distribution -->
+        <record id="demo_categ_wholesale_root" model="product.category">
+            <field name="name">Wholesale Distribution Products</field>
+            <field name="parent_id" ref="product.product_category_all"/>
+            <field name="attribute_set_ids" eval="[(6, 0, [ref('demo_set_logistics')])]"/>
+        </record>
+
+        <!-- Category: Building Materials -->
+        <record id="demo_categ_building" model="product.category">
+            <field name="name">Building Materials (Wholesale)</field>
+            <field name="parent_id" ref="demo_categ_wholesale_root"/>
+            <field name="attribute_ids" eval="[(6, 0, [
+                ref('demo_attr_material'),
+                ref('demo_attr_dimensions'),
+                ref('demo_attr_outdoor')
+            ])]"/>
+        </record>
+
+        <!-- Category: Tools & Hardware -->
+        <record id="demo_categ_tools" model="product.category">
+            <field name="name">Tools &amp; Power Hardware</field>
+            <field name="parent_id" ref="demo_categ_wholesale_root"/>
+            <field name="attribute_set_ids" eval="[(6, 0, [ref('demo_set_hardware')])]"/>
+        </record>
+
+        <!-- Category: Plumbing Supplies -->
+        <record id="demo_categ_plumbing" model="product.category">
+            <field name="name">Plumbing Piping &amp; Supplies</field>
+            <field name="parent_id" ref="demo_categ_wholesale_root"/>
+            <field name="attribute_set_ids" eval="[(6, 0, [ref('demo_set_plumbing')])]"/>
+        </record>
+
+        <!-- ========================================== -->
+        <!-- 4. Product Templates -->
+        <!-- ========================================== -->
+
+        <!-- Cordless Drill -->
+        <!-- Inherits direct Tool Specs (Battery, 18V, 2 Years) and parent Logistics Specs (Pallet, 100 Qty, Non-Hazmat) -->
+        <record id="demo_product_drill" model="product.template">
+            <field name="name">Industrial Cordless Drill 18V</field>
+            <field name="categ_id" ref="demo_categ_tools"/>
+            <field name="list_price">89.99</field>
+            <field name="standard_price">45.00</field>
+            <field name="type">consu</field>
+        </record>
+
+        <!-- PVC Pipe 2" -->
+        <!-- Inherits direct Plumbing Specs (2.0 Inch, 150 PSI, Lead Free) and parent Logistics Specs (Pallet, 100 Qty, Non-Hazmat) -->
+        <record id="demo_product_pvc" model="product.template">
+            <field name="name">Schedule 40 PVC Pipe 2 Inch</field>
+            <field name="categ_id" ref="demo_categ_plumbing"/>
+            <field name="list_price">12.50</field>
+            <field name="standard_price">4.20</field>
+            <field name="type">consu</field>
+        </record>
+
+        <!-- Treated Wood Lumber 2x4 -->
+        <!-- Inherits direct Building Specs (Material, Dimensions, Outdoor) and parent Logistics Specs (Pallet, 100 Qty, Non-Hazmat) -->
+        <record id="demo_product_lumber" model="product.template">
+            <field name="name">Treated Pine Lumber 2x4 Stud</field>
+            <field name="categ_id" ref="demo_categ_building"/>
+            <field name="list_price">4.99</field>
+            <field name="standard_price">1.80</field>
+            <field name="type">consu</field>
+        </record>
+    </data>
+</odoo>

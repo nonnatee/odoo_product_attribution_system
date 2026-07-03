@@ -22,6 +22,9 @@
             'odoo_product_attribution_system/static/src/components/dynamic_attribute_value_field.xml',
         ],
     },
+    'demo': [
+        'data/demo_data.xml',
+    ],
     'installable': True,
     'application': False,
     'license': 'LGPL-3',

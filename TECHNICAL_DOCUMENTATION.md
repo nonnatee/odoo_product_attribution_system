@@ -82,6 +82,8 @@ The system is modularized as follows:
 ```text
 odoo_product_attribution_system/
 ├── __manifest__.py                 # Module configuration and depends on ['product', 'sale']
+├── data/
+│   └── demo_data.xml               # Home Improvement wholesaler demo records
 ├── models/
 │   ├── product_attribute.py        # Adds value_type selection to attributes
 │   ├── product_attribute_set.py    # Sets and default value schemas

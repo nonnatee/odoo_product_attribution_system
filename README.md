@@ -67,6 +67,8 @@ odoo_product_attribution_system/
 ├── __init__.py
 ├── __manifest__.py                 # Module manifest and dependencies (depends on product & sale)
 ├── TECHNICAL_DOCUMENTATION.md     # Main developer overview and high-level system diagram
+├── data/
+│   └── demo_data.xml               # Home Improvement wholesaler demo records
 ├── docs/                           # Specialized guides for traversal, EAV schema, OWL, and tests
 ├── models/
 │   ├── __init__.py

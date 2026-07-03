@@ -7,7 +7,7 @@
     'description': """
         Milestone 1: Category-Based Attribute Inheritance & Hybrid EAV models.
     """,
-    'depends': ['product'],
+    'depends': ['product', 'sale'],
     'data': [
         'security/ir.model.access.csv',
         'views/product_attribute_views.xml',

@@ -57,6 +57,6 @@
     <!-- Product Attribute Set: Menu -->
     <menuitem id="menu_product_attribute_set_action"
               action="product_attribute_set_action"
-              parent="product.menu_attribute_action"
+              parent="sale.menu_product_attribute_action"
               sequence="20"/>
 </odoo>

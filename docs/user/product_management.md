@@ -21,6 +21,12 @@ Instead of editing generic text, the grid displays interactive inputs that switc
 ### Readonly Mode
 If the product template form is in read-only mode, the dynamic widget displays computed, user-friendly labels (e.g., displaying `Yes`/`No` instead of a checkbox, or rendering the selected dropdown label).
 
+### Dynamic UI Behavior (Configurator Rules)
+When the product is in edit mode and values are changed in the Specifications tab:
+* **Hiding Rows**: If a conditional hide rule matches, the target attribute row **instantly disappears** from the Specifications grid. If the triggering value is changed back, the row reappears with its previous value intact.
+* **Read-only / Disabling**: If a conditional readonly rule matches, the input field for the target attribute is instantly disabled/grayed-out.
+* **Forcing Values**: If a conditional set_value rule matches, the target EAV field is instantly updated with the predefined action value in the browser.
+
 ---
 
 ## 2. Default Values Resolution

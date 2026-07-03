@@ -15,9 +15,11 @@
 
                     <field name="custom_value_ids"
                            domain="[('attribute_id', 'in', all_inherited_attribute_ids)]">
-                        <list editable="bottom" create="0" delete="0">
+                        <list editable="bottom" create="0" delete="0" decoration-warning="not is_visible">
                             <field name="attribute_id" readonly="1"/>
                             <field name="value_type" readonly="1" column_invisible="True"/>
+                            <field name="is_visible" column_invisible="True"/>
+                            <field name="is_readonly" column_invisible="True"/>
                             <field name="display_value" widget="dynamic_attribute_value"/>
                             <field name="value_text" column_invisible="True"/>
                             <field name="value_integer" column_invisible="True"/>

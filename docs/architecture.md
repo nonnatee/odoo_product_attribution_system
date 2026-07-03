@@ -81,4 +81,25 @@ This targeted cascade is defined in [models/product_category.py](file:///c:/User
             ])
             templates._sync_custom_values()
         return res
+
+---
+
+## 4. Conditional Attribute Rules Engine & Dynamic Hiding
+
+The product configurator layer evaluates dependency rules on-the-fly.
+
+### Dynamic Visibility & Readonly Compute
+When values are changed in the Specifications grid, the Odoo client triggers recomputation of `is_visible` and `is_readonly` fields on-the-fly.
+
+### Hiding Rows with Zero JS Overrides
+To physically collapse/hide records marked as invisible without complex custom list view renderers, the system uses a combination of Odoo dynamic decorations and a clean CSS display rule:
+1. The `<list>` view in `views/product_template_views.xml` defines `decoration-warning="not is_visible"`.
+2. When `is_visible` evaluates to `False`, Odoo automatically appends the class `text-warning` to the row's `<tr>` element.
+3. The custom CSS stylesheet in [static/src/css/product_attribution.css](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/static/src/css/product_attribution.css) defines:
+   ```css
+   .o_field_one2many[name="custom_value_ids"] tr.text-warning {
+       display: none !important;
+   }
+   ```
+4. This instantly collapses the row from the DOM while preserving record cache integrity (hidden data is never deleted, preventing data loss).
 ```

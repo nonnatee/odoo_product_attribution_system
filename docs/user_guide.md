@@ -16,6 +16,8 @@ Use the following links to navigate the detailed guides:
    * Assigning attributes and sets to product categories, recursive parent inheritance rules, and system synchronization.
 3. **[Product Template Specifications](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/product_management.md)**
    * Operating the Specifications tab, utilizing the dynamic OWL widget inputs, and filtering products via search fields.
+4. **[3-Tiers Configuration Tutorial](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/tutorial.md)**
+   * A hands-on guide to configuring basic attributes, category inheritance, and dynamic conditional rules.
 
 ---
 

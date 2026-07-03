@@ -1244,11 +1244,158 @@ class TestProductAttribution(common.HttpCase):
             'attribute_set_ids': [(4, set_tmpl_only.id)]
         })
 
-        # Inherited attributes should include parent category attributes (attr_text, attr_integer)
-        # AND template-specific set attributes (attr_extra)
         self.assertIn(self.attr_text, product.all_inherited_attribute_ids)
         self.assertIn(attr_extra, product.all_inherited_attribute_ids)
         
         val_extra = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_extra)
         self.assertEqual(val_extra.value_text, 'Extra Value')
+
+    def test_75_configurator_rule_hide(self):
+        """Test configurator rule: hide action when trigger condition is met"""
+        attr_trigger = self.env['product.attribute'].create({'name': 'T1', 'value_type': 'boolean'})
+        attr_target = self.env['product.attribute'].create({'name': 'T2', 'value_type': 'text'})
+        
+        set_rec = self.env['product.attribute.set'].create({
+            'name': 'Hide Rule Set',
+            'attribute_line_ids': [
+                (0, 0, {'attribute_id': attr_trigger.id, 'value_boolean': False}),
+                (0, 0, {'attribute_id': attr_target.id, 'value_text': 'Hello'}),
+            ]
+        })
+        
+        rule = self.env['product.attribute.set.rule'].create({
+            'set_id': set_rec.id,
+            'attribute_id': attr_trigger.id,
+            'condition_value_boolean': True,
+            'action_type': 'hide',
+            'target_attribute_id': attr_target.id,
+        })
+        
+        product = self.env['product.template'].create({
+            'name': 'Hide Product',
+            'attribute_set_ids': [(4, set_rec.id)]
+        })
+        
+        line_trigger = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_trigger)
+        line_target = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_target)
+        
+        # Initially condition is False (value_boolean=False) -> target should be visible
+        self.assertTrue(line_target.is_visible)
+        
+        # Trigger condition is met (value_boolean=True) -> target should become invisible
+        line_trigger.write({'value_boolean': True})
+        self.assertFalse(line_target.is_visible)
+
+    def test_76_configurator_rule_readonly(self):
+        """Test configurator rule: readonly action when trigger condition is met"""
+        attr_trigger = self.env['product.attribute'].create({'name': 'R1', 'value_type': 'selection'})
+        val_trigger_a = self.env['product.attribute.value'].create({'name': 'Opt A', 'attribute_id': attr_trigger.id})
+        val_trigger_b = self.env['product.attribute.value'].create({'name': 'Opt B', 'attribute_id': attr_trigger.id})
+        attr_target = self.env['product.attribute'].create({'name': 'R2', 'value_type': 'integer'})
+        
+        set_rec = self.env['product.attribute.set'].create({
+            'name': 'Readonly Rule Set',
+            'attribute_line_ids': [
+                (0, 0, {'attribute_id': attr_trigger.id, 'value_selection_id': val_trigger_a.id}),
+                (0, 0, {'attribute_id': attr_target.id, 'value_integer': 10}),
+            ]
+        })
+        
+        rule = self.env['product.attribute.set.rule'].create({
+            'set_id': set_rec.id,
+            'attribute_id': attr_trigger.id,
+            'condition_value_selection_ids': [(6, 0, [val_trigger_b.id])],
+            'action_type': 'readonly',
+            'target_attribute_id': attr_target.id,
+        })
+        
+        product = self.env['product.template'].create({
+            'name': 'Readonly Product',
+            'attribute_set_ids': [(4, set_rec.id)]
+        })
+        
+        line_trigger = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_trigger)
+        line_target = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_target)
+        
+        # Initially condition is False (value_selection=Opt A) -> target should not be readonly
+        self.assertFalse(line_target.is_readonly)
+        
+        # Trigger condition is met (value_selection=Opt B) -> target should become readonly
+        line_trigger.write({'value_selection_id': val_trigger_b.id})
+        self.assertTrue(line_target.is_readonly)
+
+    def test_77_configurator_rule_set_value(self):
+        """Test configurator rule: set_value action forces values dynamically"""
+        attr_trigger = self.env['product.attribute'].create({'name': 'S1', 'value_type': 'boolean'})
+        attr_target = self.env['product.attribute'].create({'name': 'S2', 'value_type': 'integer'})
+        
+        set_rec = self.env['product.attribute.set'].create({
+            'name': 'Set Value Rule Set',
+            'attribute_line_ids': [
+                (0, 0, {'attribute_id': attr_trigger.id, 'value_boolean': False}),
+                (0, 0, {'attribute_id': attr_target.id, 'value_integer': 10}),
+            ]
+        })
+        
+        rule = self.env['product.attribute.set.rule'].create({
+            'set_id': set_rec.id,
+            'attribute_id': attr_trigger.id,
+            'condition_value_boolean': True,
+            'action_type': 'set_value',
+            'target_attribute_id': attr_target.id,
+            'action_value_integer': 99,
+        })
+        
+        product = self.env['product.template'].create({
+            'name': 'Set Value Product',
+            'attribute_set_ids': [(4, set_rec.id)]
+        })
+        
+        line_trigger = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_trigger)
+        line_target = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_target)
+        
+        # Initially condition is False (value_boolean=False) -> target value is default (10)
+        self.assertEqual(line_target.value_integer, 10)
+        
+        # Trigger condition is met (value_boolean=True) -> target value is forced to 99
+        line_trigger.write({'value_boolean': True})
+        self.assertEqual(line_target.value_integer, 99)
+
+    def test_78_configurator_rule_constraints(self):
+        """Test configurator rule: validation constraints prevent invalid rule creation"""
+        attr1 = self.env['product.attribute'].create({'name': 'C1', 'value_type': 'text'})
+        attr2 = self.env['product.attribute'].create({'name': 'C2', 'value_type': 'integer'})
+        attr3 = self.env['product.attribute'].create({'name': 'C3', 'value_type': 'float'})
+        
+        set_rec = self.env['product.attribute.set'].create({
+            'name': 'Constraint Set',
+            'attribute_line_ids': [
+                (0, 0, {'attribute_id': attr1.id}),
+                (0, 0, {'attribute_id': attr2.id}),
+            ]
+        })
+        
+        # 1. Trigger attribute not in set -> raises ValidationError
+        with self.assertRaises(ValidationError):
+            self.env['product.attribute.set.rule'].create({
+                'set_id': set_rec.id,
+                'attribute_id': attr3.id,
+                'target_attribute_id': attr2.id,
+            })
+            
+        # 2. Target attribute not in set -> raises ValidationError
+        with self.assertRaises(ValidationError):
+            self.env['product.attribute.set.rule'].create({
+                'set_id': set_rec.id,
+                'attribute_id': attr1.id,
+                'target_attribute_id': attr3.id,
+            })
+            
+        # 3. Trigger == target -> raises ValidationError
+        with self.assertRaises(ValidationError):
+            self.env['product.attribute.set.rule'].create({
+                'set_id': set_rec.id,
+                'attribute_id': attr1.id,
+                'target_attribute_id': attr1.id,
+            })
 

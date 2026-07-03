@@ -30,6 +30,39 @@
                                 </list>
                             </field>
                         </page>
+                        <page string="Rules" name="rules">
+                            <field name="rule_ids">
+                                <list editable="bottom">
+                                    <field name="attribute_id"/>
+                                    <field name="value_type" column_invisible="True"/>
+                                    <!-- Trigger values -->
+                                    <field name="condition_value_selection_ids" widget="many2many_tags"
+                                           invisible="value_type != 'selection'"
+                                           domain="[('attribute_id', '=', attribute_id)]"/>
+                                    <field name="condition_value_boolean"
+                                           invisible="value_type != 'boolean'"/>
+                                    <field name="condition_value_text" placeholder="e.g. Steel"
+                                           invisible="value_type in ('selection', 'boolean')"/>
+                                    <field name="action_type"/>
+                                    <field name="target_attribute_id"/>
+                                    <field name="target_value_type" column_invisible="True"/>
+                                    <!-- Action values -->
+                                    <field name="action_value_text"
+                                           invisible="action_type != 'set_value' or target_value_type != 'text'"/>
+                                    <field name="action_value_integer"
+                                           invisible="action_type != 'set_value' or target_value_type != 'integer'"/>
+                                    <field name="action_value_float"
+                                           invisible="action_type != 'set_value' or target_value_type != 'float'"/>
+                                    <field name="action_value_date"
+                                           invisible="action_type != 'set_value' or target_value_type != 'date'"/>
+                                    <field name="action_value_boolean"
+                                           invisible="action_type != 'set_value' or target_value_type != 'boolean'"/>
+                                    <field name="action_value_selection_id"
+                                           invisible="action_type != 'set_value' or target_value_type != 'selection'"
+                                           domain="[('attribute_id', '=', target_attribute_id)]"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
             </form>

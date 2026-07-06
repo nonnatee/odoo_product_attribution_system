@@ -14,7 +14,7 @@ Tests are located in [tests/test_product_attribution.py](file:///c:/Users/nonna/
 
 ## 2. Test Coverage Details
 
-The test suite consists of **57 specialized tests** divided into distinct tiers:
+The test suite consists of **61 specialized tests** divided into distinct tiers:
 
 ### Tier 1: Happy Paths & Feature Coverage
 These tests verify core functional requirements under normal conditions:
@@ -38,6 +38,11 @@ These tests verify that the system handles edge cases and invalid states safely:
 * **Dynamic Modifiers (Tests 47-48)**: Verifies adding or deleting attributes on a category immediately synchronizes active product records.
 * **Data Sanitization & Fallbacks (Tests 49-53)**: Verifies writing invalid formats (e.g. string into integer or float EAV fields) throws type errors or is sanitized.
 * **Fuzzy & Wildcard Searches (Tests 54-57)**: Verifies special characters, wildcards, and non-existent queries are handled gracefully.
+* **Product Configurator Rules (Tests 75-78)**: Verifies the behavior of conditional rules:
+  * `test_75` checks that trigger conditions dynamically hide target attributes (`is_visible` evaluations).
+  * `test_76` checks that trigger conditions dynamically disable target attributes (`is_readonly` evaluations).
+  * `test_77` checks that trigger conditions dynamically set target values (`set_value` actions).
+  * `test_78` checks set rule validation constraints (preventing duplicate or invalid attribute assignments in rules).
 
 ---
 

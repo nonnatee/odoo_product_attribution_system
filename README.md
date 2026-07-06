@@ -50,6 +50,7 @@ Detailed documentation is organized as follows:
 * **[Attributes & Sets Setup](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/attributes_and_sets.md)**: Managing attributes, value types, sets, and CSV imports.
 * **[Category Configuration](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/category_configuration.md)**: Linking attributes to categories, inheritance, and imports.
 * **[Product Template Management](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/product_management.md)**: Editing product specs tab, widget usages, and search filterings.
+* **[3-Tiers Configuration Tutorial](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/tutorial.md)**: A hands-on guide (Basic Setup -> Category Inheritance -> Dynamic Configurator Rules).
 
 ### 💻 Developer & Technical Documentation
 * **[Technical Documentation Index](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/TECHNICAL_DOCUMENTATION.md)**: System design and high-level architecture diagram.

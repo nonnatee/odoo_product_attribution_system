@@ -85,7 +85,7 @@ class DynamicAttributeValueField extends Component {
     }
 
     get isReadonly() {
-        return this.props.readonly;
+        return this.props.readonly || !!this.props.record.data.is_readonly;
     }
 
     get textValue() {

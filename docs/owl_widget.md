@@ -35,7 +35,17 @@ In [static/src/components/dynamic_attribute_value_field.xml](file:///c:/Users/no
 | **`selection`** | `<select class="o_input">` | `value_selection_id` |
 
 ### Readonly Mode
-If `isReadonly` is evaluated to `true`, the widget acts as a simple span tag rendering the computed string:
+The widget's `isReadonly` getter decides whether to display inputs or the simple read-only span. It evaluates to `true` if:
+1. Odoo's standard view layout sets the field as read-only (`this.props.readonly`).
+2. The active record has `is_readonly` computed as `true` by dynamic configurator rules (`this.props.record.data.is_readonly`).
+
+```javascript
+    get isReadonly() {
+        return this.props.readonly || !!this.props.record.data.is_readonly;
+    }
+```
+
+When evaluated to `true`, the widget acts as a simple span tag rendering the computed string:
 ```xml
 <t t-if="isReadonly">
     <span t-esc="displayValue"/>

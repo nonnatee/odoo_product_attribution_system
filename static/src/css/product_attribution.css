@@ -1,0 +1,6 @@
+/* Custom Product Attribution System Layout Styling */
+
+/* Hide rows in the Specifications tab dynamically when evaluated as warning-decorated (not visible) */
+.o_field_one2many[name="custom_value_ids"] tr.text-warning {
+    display: none !important;
+}

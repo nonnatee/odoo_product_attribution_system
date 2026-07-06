@@ -18,6 +18,7 @@
     ],
     'assets': {
         'web.assets_backend': [
+            'odoo_product_attribution_system/static/src/css/product_attribution.css',
             'odoo_product_attribution_system/static/src/components/dynamic_attribute_value_field.js',
             'odoo_product_attribution_system/static/src/components/dynamic_attribute_value_field.xml',
         ],

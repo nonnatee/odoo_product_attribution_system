@@ -15,9 +15,9 @@ Use the following links to navigate the detailed guides:
 2. **[Category Configuration & Inheritance](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/category_configuration.md)**
    * Assigning attributes and sets to product categories, recursive parent inheritance rules, and POS/eCommerce channel synchronization.
 3. **[Product Template Specifications](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/product_management.md)**
-   * Operating the Specifications tab, tracking PIM lifecycle stages, locking approved products, using the dynamic OWL widget inputs, and uploading digital assets (DAM).
-4. **[4-Tiers Configuration Tutorial](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/tutorial.md)**
-   * A hands-on guide walk-through covering custom attributes, category inheritance, channel sync, PIM validation workflow, and multi-channel CSV/JSON feed exports.
+   * Operating the Specifications tab, tracking PIM lifecycle stages, locking approved products, using the dynamic OWL widget inputs, uploading digital assets (DAM), and filtering products via search fields.
+4. **[5-Tiers Configuration Tutorial](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/tutorial.md)**
+   * A hands-on guide to configuring basic attributes, category inheritance, dynamic conditional rules, PIM validation workflow, digital asset management, and multi-channel feed exports.
 
 ---
 

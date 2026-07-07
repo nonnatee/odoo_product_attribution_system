@@ -36,9 +36,6 @@ These tests verify that the system handles edge cases and invalid states safely:
 * **Concurrent/Rapid updates (Test 46)**: Simulates rapid category changing to prevent transactional race conditions.
 * **Dynamic Modifiers (Tests 47-48)**: Verifies adding or deleting attributes on a category immediately synchronizes active product records.
 * **Data Sanitization & Fallbacks (Tests 49-53)**: Verifies writing invalid formats (e.g. string into integer or float EAV fields) throws type errors or is sanitized.
-<<<<<<< Updated upstream
-* **Fuzzy & Wildcard Searches (Tests 54-57)**: Verifies special characters, wildcards, and non-existent queries are handled gracefully.
-=======
 * **Fuzzy & Wildcard Searches (Tests 54-59)**: Verifies special characters, wildcards, case-insensitivity, and mismatched field filters.
 * **Security & Access Control (Test 60)**: Asserts that non-managers are restricted from altering category attributes/sets, but are authorized to edit specifications on product templates.
 

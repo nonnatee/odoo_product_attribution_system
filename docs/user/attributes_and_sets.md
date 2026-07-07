@@ -42,7 +42,39 @@ To define new specifications for your product catalog, you first create **Produc
 
 ---
 
-## 3. Administrator Import & Export Guide (CSV/Excel)
+## 3. Configuring Attribute Set Rules (Configurator)
+
+Attribute Sets support **Rules** which dynamically change the behavior of specifications depending on trigger conditions.
+
+### Trigger Conditions
+You can choose any attribute in the set to act as a trigger, matching when its value:
+* Matches selected options (for **Selection** types).
+* Matches checked/unchecked state (for **Boolean** types).
+* Matches specific input characters (for **Text**, **Integer**, **Float**, or **Date** types).
+
+### Action Types
+When a rule's condition is met, Odoo will execute one of three actions:
+1. **Hide Target Attribute**: Removes the row from the Specifications grid completely.
+2. **Disable Target Attribute (Readonly)**: Prevents users from editing the value field in the grid.
+3. **Force Target Attribute Value**: Automatically sets a specific value in the target EAV field.
+
+### How to Create a Rule:
+1. Navigate to **Sales / Inventory > Configuration > Products > Attribute Sets** and open your set.
+2. Open the **Rules** sub-tab.
+3. Click **Add a line**:
+   * **Trigger Attribute**: Select the attribute that starts the rule.
+   * **Trigger values** (fill only the trigger column corresponding to the attribute's type):
+     * *Trigger Selection Values*: Predefined dropdown options.
+     * *Trigger Boolean Value*: Checked/Unchecked.
+     * *Trigger String Value*: Text match.
+   * **Action**: Select `Hide Target Attribute`, `Disable Target Attribute (Readonly)`, or `Force Target Attribute Value`.
+   * **Target Attribute**: Select the attribute to affect (must belong to the set).
+   * **Action values** (required *only* if the action is `Force Target Attribute Value`): Set the value in the column matching the target's type.
+4. Save the set.
+
+---
+
+## 4. Administrator Import & Export Guide (CSV/Excel)
 
 For large catalogs, you can import attributes, values, and sets using Odoo's built-in data import utility.
 

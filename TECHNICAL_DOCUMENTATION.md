@@ -10,7 +10,7 @@ Detailed, specialized technical information is organized across modular guides i
 
 ## 🗺️ Documentation Directory
 
-Use the following links to navigate the detailed technical guides:
+Use the following links to navigate the detailed guides:
 
 1. **[Architecture & Traversal Logic](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/architecture.md)**
    * Recursive category attribute inheritance, computation caching, performance considerations, and cycle prevention.
@@ -20,6 +20,8 @@ Use the following links to navigate the detailed technical guides:
    * Code structure and template rendering logic for `DynamicAttributeValueField`, type-based dynamic rendering, and writeback logic.
 4. **[Testing Suite & Coverage Guide](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/testing.md)**
    * Unit and integration testing strategy, post-install HttpCase setups, Boundary Value Analysis (BVA), and testing execution guide.
+5. **[3-Tiers Configuration Tutorial](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/tutorial.md)**
+   * A hands-on tutorial guiding users through basic setup, inheritance, and dynamic conditional rules.
 
 ---
 
@@ -32,10 +34,12 @@ graph TD
     classDef model fill:#f9f,stroke:#333,stroke-width:2px;
     classDef view fill:#bbf,stroke:#333,stroke-width:2px;
     classDef owl fill:#f96,stroke:#333,stroke-width:2px;
+    classDef rule fill:#aaf,stroke:#333,stroke-width:2px;
 
     %% Models
     PA[product.attribute]:::model -->|Has value_type: text, integer, float, date, boolean, selection| PASL[product.attribute.set.line]:::model
     PAS[product.attribute.set]:::model -->|Contains lines| PASL
+    PAS -->|Defines| PASR[product.attribute.set.rule]:::rule
     
     PC[product.category]:::model -->|Inherits parent attributes| PC
     PC -->|Has attribute_ids & attribute_set_ids| PA
@@ -52,6 +56,7 @@ graph TD
     
     PTCV -->|References| PA
     PTCV -->|EAV Fields: value_text, value_integer, value_float, value_date, value_boolean, value_selection_id| PTCV
+    PTCV -->|Computes is_visible & is_readonly based on rule| PASR
     
     %% Defaults Resolution
     PT -.->|1. Query template attribute_set_ids| PASL
@@ -64,10 +69,12 @@ graph TD
     
     %% View Layer
     PTV["Product Form View <Specifications Tab>"]:::view -->|Loads grid of| PTCV
+    PTV -->|Applies decoration-warning if not is_visible| PTV
+    PTV -->|CSS overrides text-warning to display:none| Hide[Row Hides Completely]
     PTV -->|Applies widget| OWL["dynamic_attribute_value OWL Widget"]:::owl
     
     %% Widget rendering
-    OWL -->|If readonly| Display[Renders display_value text]
+    OWL -->|If readonly or is_readonly| Display[Renders display_value text]
     OWL -->|If edit text| InputText[Text input]
     OWL -->|If edit integer| InputInt[Number input step=1]
     OWL -->|If edit float| InputFloat[Number input step=any]
@@ -82,6 +89,7 @@ graph TD
     InputDate -->|on-change event| Writeback
     InputBool -->|on-change event| Writeback
     SelectDropdown -->|on-change event| Writeback
+    Writeback -->|on-change rule evaluation| PASR
 ```
 
 ---
@@ -109,6 +117,10 @@ odoo_product_attribution_system/
 ├── __manifest__.py                 # Module configuration and depends on ['product', 'sale']
 ├── data/
 │   └── demo_data.xml               # Home Improvement wholesaler demo records
+├── docs/
+│   ├── tutorial.md                 # 3-Tiers Configuration Tutorial
+│   ├── user_guide.md               # User manual index
+│   └── user/                       # Split user guides
 ├── models/
 │   ├── product_attribute.py        # Adds value_type selection to attributes
 │   ├── product_attribute_set.py    # Sets and default value schemas

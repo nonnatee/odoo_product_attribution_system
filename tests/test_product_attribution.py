@@ -1244,16 +1244,12 @@ class TestProductAttribution(common.HttpCase):
             'attribute_set_ids': [(4, set_tmpl_only.id)]
         })
 
-        # Inherited attributes should include parent category attributes (attr_text, attr_integer)
-        # AND template-specific set attributes (attr_extra)
         self.assertIn(self.attr_text, product.all_inherited_attribute_ids)
         self.assertIn(attr_extra, product.all_inherited_attribute_ids)
         
         val_extra = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_extra)
         self.assertEqual(val_extra.value_text, 'Extra Value')
 
-<<<<<<< Updated upstream
-=======
     def test_75_configurator_rule_hide(self):
         """Test configurator rule: hide action when trigger condition is met"""
         attr_trigger = self.env['product.attribute'].create({'name': 'T1', 'value_type': 'boolean'})

@@ -191,10 +191,105 @@ class ProductTemplate(models.Model):
                 combined += line
             self.custom_value_ids = combined
 
+    def _evaluate_set_value_rules(self):
+        for template in self:
+            sets = template.attribute_set_ids
+            if template.categ_id:
+                curr = template.categ_id
+                visited = {curr.id}
+                while curr:
+                    sets |= curr.attribute_set_ids
+                    curr = curr.parent_id
+                    if curr and curr.id in visited:
+                        break
+                    if curr:
+                        visited.add(curr.id)
+
+            rules = sets.mapped('rule_ids').filtered(lambda r: r.action_type == 'set_value')
+            changed = True
+            iterations = 0
+            while changed and iterations < 10:
+                changed = False
+                iterations += 1
+                for rule in rules:
+                    trigger_line = template.custom_value_ids.filtered(lambda l: l.attribute_id == rule.attribute_id)
+                    if not trigger_line:
+                        continue
+                    trigger_line = trigger_line[0]
+
+                    condition_met = False
+                    val_type = trigger_line.value_type
+
+                    if val_type == 'selection':
+                        if trigger_line.value_selection_id in rule.condition_value_selection_ids:
+                            condition_met = True
+                    elif val_type == 'boolean':
+                        if trigger_line.value_boolean == rule.condition_value_boolean:
+                            condition_met = True
+                    else:
+                        cur_val = ''
+                        if val_type == 'text':
+                            cur_val = trigger_line.value_text or ''
+                        elif val_type == 'integer':
+                            cur_val = str(trigger_line.value_integer) if trigger_line.value_integer else ''
+                        elif val_type == 'float':
+                            cur_val = str(trigger_line.value_float) if trigger_line.value_float else ''
+                        elif val_type == 'date':
+                            cur_val = str(trigger_line.value_date) if trigger_line.value_date else ''
+
+                        if rule.condition_value_text and cur_val == rule.condition_value_text:
+                            condition_met = True
+
+                    if condition_met:
+                        target_line = template.custom_value_ids.filtered(lambda l: l.attribute_id == rule.target_attribute_id)
+                        if target_line:
+                            target_line = target_line[0]
+                            t_type = target_line.value_type
+                            old_val = False
+                            new_val = False
+
+                            if t_type == 'text':
+                                old_val = target_line.value_text
+                                new_val = rule.action_value_text
+                                if old_val != new_val:
+                                    target_line.value_text = new_val
+                                    changed = True
+                            elif t_type == 'integer':
+                                old_val = target_line.value_integer
+                                new_val = rule.action_value_integer
+                                if old_val != new_val:
+                                    target_line.value_integer = new_val
+                                    changed = True
+                            elif t_type == 'float':
+                                old_val = target_line.value_float
+                                new_val = rule.action_value_float
+                                if old_val != new_val:
+                                    target_line.value_float = new_val
+                                    changed = True
+                            elif t_type == 'date':
+                                old_val = target_line.value_date
+                                new_val = rule.action_value_date
+                                if old_val != new_val:
+                                    target_line.value_date = new_val
+                                    changed = True
+                            elif t_type == 'boolean':
+                                old_val = target_line.value_boolean
+                                new_val = rule.action_value_boolean
+                                if old_val != new_val:
+                                    target_line.value_boolean = new_val
+                                    changed = True
+                            elif t_type == 'selection':
+                                old_val = target_line.value_selection_id
+                                new_val = rule.action_value_selection_id
+                                if old_val != new_val:
+                                    target_line.value_selection_id = new_val
+                                    changed = True
+
     @api.model_create_multi
     def create(self, vals_list):
         templates = super().create(vals_list)
         templates._sync_custom_values()
+        templates._evaluate_set_value_rules()
         templates._sync_external_product_categories()
         return templates
 
@@ -223,6 +318,7 @@ class ProductTemplate(models.Model):
         res = super().write(vals)
         if any(f in vals for f in ('categ_id', 'attribute_set_ids')):
             self._sync_custom_values()
+            self._evaluate_set_value_rules()
         if 'categ_id' in vals:
             self._sync_external_product_categories()
         return res

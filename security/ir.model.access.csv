@@ -2,6 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_product_template_custom_value,product.template.custom.value,model_product_template_custom_value,odoo_product_attribution_system.group_pim_user,1,1,1,1
 access_product_attribute_set,product.attribute.set,model_product_attribute_set,odoo_product_attribution_system.group_pim_user,1,1,1,1
 access_product_attribute_set_line,product.attribute.set.line,model_product_attribute_set_line,odoo_product_attribution_system.group_pim_user,1,1,1,1
+access_product_attribute_set_rule,product.attribute.set.rule,model_product_attribute_set_rule,odoo_product_attribution_system.group_pim_user,1,1,1,1
 access_product_pim_asset,product.pim.asset,model_product_pim_asset,odoo_product_attribution_system.group_pim_user,1,1,1,1
 access_pim_export_profile,pim.export.profile,model_pim_export_profile,odoo_product_attribution_system.group_pim_user,1,1,1,1
 access_pim_export_mapping,pim.export.mapping,model_pim_export_mapping,odoo_product_attribution_system.group_pim_user,1,1,1,1

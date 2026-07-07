@@ -67,6 +67,26 @@ Stores custom specification values per product template using an EAV database la
   * `value_selection_id` (`fields.Many2one` pointing to `product.attribute.value`)
 * **`display_value`** (`fields.Char`): Computed string representation of the saved EAV value.
 * **`is_inherited`** (`fields.Boolean`): Computed flag showing if the attribute is currently inherited by the template's active category or template sets.
+* **`is_visible`** (`fields.Boolean`): Computed flag indicating if the attribute should be visible based on active conditional rules.
+* **`is_readonly`** (`fields.Boolean`): Computed flag indicating if the attribute should be read-only based on active conditional rules.
+
+### 1.7 `product.attribute.set.rule` (New)
+Defines conditional dependency rules to filter, hide, disable, or force target values.
+* **`set_id`** (`fields.Many2one`): Relation to the parent `product.attribute.set`.
+* **`attribute_id`** (`fields.Many2one`): Trigger attribute (must belong to the set).
+* **Trigger Conditions**:
+  * `condition_value_selection_ids` (`fields.Many2many` to `product.attribute.value`): Trigger selection options.
+  * `condition_value_boolean` (`fields.Boolean`): Trigger boolean state.
+  * `condition_value_text` (`fields.Char`): Trigger text value matches.
+* **`action_type`** (`fields.Selection`): Action to apply: `hide`, `readonly`, `set_value`.
+* **`target_attribute_id`** (`fields.Many2one`): Affected target attribute (must belong to the set, trigger != target).
+* **Action Values** (for `set_value` action):
+  * `action_value_text`
+  * `action_value_integer`
+  * `action_value_float`
+  * `action_value_date`
+  * `action_value_boolean`
+  * `action_value_selection_id` (pointing to target `product.attribute.value`)
 
 ---
 

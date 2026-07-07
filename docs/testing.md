@@ -14,11 +14,7 @@ Tests are located in [tests/test_product_attribution.py](file:///c:/Users/nonna/
 
 ## 2. Test Coverage Details
 
-<<<<<<< Updated upstream
-The test suite consists of **57 specialized tests** divided into distinct tiers:
-=======
-The test suite consists of **81 specialized tests** divided into distinct tiers:
->>>>>>> Stashed changes
+The test suite consists of **87 specialized tests** divided into distinct tiers:
 
 ### Tier 1: Happy Paths & Feature Coverage (Tests 1-30)
 These tests verify core functional requirements under normal conditions:
@@ -74,7 +70,15 @@ These tests verify synchronization between standard categories, POS, and eCommer
 * **POS Category Sync (Test 79)**: Asserts creating, updating, parent linking, and deleting standard categories replicates matching hierarchies in POS categories.
 * **eCommerce Category Sync (Test 80)**: Asserts replicating and nesting standard categories to Website/eCommerce public categories.
 * **Product Category Association Sync (Test 81)**: Asserts assigning standard categories automatically synchronizes POS and Website category links on the product record.
->>>>>>> Stashed changes
+
+### Tier 8: PIM Workflow, Roles & Settings Configuration (Tests 82-87)
+These tests verify PIM workflow governance, user role controls, config settings, and multi-channel exports:
+* **Completeness Score (Test 82)**: Asserts dynamic calculation of the composite score using core fields and EAV required specs.
+* **Workflow & Locking (Test 83)**: Asserts state transitions (Draft -> Enriching -> Approved), blocks approval when completeness < 100%, and locks approved records to read-only.
+* **DAM Asset Management (Test 84)**: Asserts creation, link validation, and categorization of product digital attachments.
+* **Feed Export Trigger (Test 85)**: Asserts profile mapping validation and binary file compilation (CSV/JSON) triggered for approved products.
+* **PIM Security Roles (Test 86)**: Asserts Operator role is blocked from approving specifications, ensuring only PIM Managers can transition products to Approved.
+* **Lock Bypass Settings (Test 87)**: Asserts the config parameter `pim_lock_bypass` dynamically allows/blocks PIM Managers from editing Approved products.
 
 ---
 

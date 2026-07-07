@@ -13,9 +13,11 @@ Use the following links to navigate the detailed guides:
 1. **[Creating Attributes & Attribute Sets](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/attributes_and_sets.md)**
    * Configuring custom attributes, selecting data types (Value Types), grouping attributes into sets, defining default values, and importing/exporting configurations via CSV.
 2. **[Category Configuration & Inheritance](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/category_configuration.md)**
-   * Assigning attributes and sets to product categories, recursive parent inheritance rules, and system synchronization.
+   * Assigning attributes and sets to product categories, recursive parent inheritance rules, and POS/eCommerce channel synchronization.
 3. **[Product Template Specifications](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/product_management.md)**
-   * Operating the Specifications tab, utilizing the dynamic OWL widget inputs, and filtering products via search fields.
+   * Operating the Specifications tab, tracking PIM lifecycle stages, locking approved products, using the dynamic OWL widget inputs, and uploading digital assets (DAM).
+4. **[4-Tiers Configuration Tutorial](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/tutorial.md)**
+   * A hands-on guide walk-through covering custom attributes, category inheritance, channel sync, PIM validation workflow, and multi-channel CSV/JSON feed exports.
 
 ---
 
@@ -34,6 +36,12 @@ Once the module is installed, its settings are integrated into standard Sales an
 * **Product Categories**: 
   * Go to **Sales > Configuration > Products > Product Categories**
   * Or go to **Inventory > Configuration > Products > Product Categories**
-* **Product Templates**: 
+* **Product Templates (PIM Stage Workflow & Assets)**: 
   * Go to **Sales > Products > Products**
   * Or go to **Inventory > Products > Products**
+* **PIM Export Profiles**:
+  * Go to **Sales > Configuration > Products > PIM Export Profiles**
+  * Or go to **Inventory > Configuration > Products > PIM Export Profiles**
+* **PIM App Settings**:
+  * Go to **Sales > Configuration > Products > PIM Settings**
+  * Or go to **Inventory > Configuration > Products > PIM Settings**

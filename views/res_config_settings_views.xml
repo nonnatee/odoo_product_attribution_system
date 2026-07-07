@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Standalone PIM Settings Form View -->
+    <record id="res_config_settings_view_form_pim" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.pim</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            <form string="PIM Configuration" class="oe_form_configuration">
+                <header>
+                    <button string="Save" type="object" name="execute" class="oe_highlight"/>
+                    <button string="Cancel" type="object" name="cancel" class="oe_link"/>
+                </header>
+                <sheet>
+                    <h2>PIM Application Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="pim_bypass_settings">
+                            <div class="o_setting_left_pane">
+                                <field name="pim_lock_bypass"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="pim_lock_bypass"/>
+                                <div class="text-muted">
+                                    Allow PIM Managers to directly edit Approved/Locked product templates and custom specifications without resetting their stages.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Standalone Settings Action Window -->
+    <record id="pim_config_settings_action" model="ir.actions.act_window">
+        <field name="name">PIM Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="view_id" ref="res_config_settings_view_form_pim"/>
+    </record>
+
+    <!-- Standalone Settings Menu -->
+    <menuitem id="menu_pim_config_settings_action"
+              action="pim_config_settings_action"
+              parent="sale.menu_product_attribute_action"
+              groups="odoo_product_attribution_system.group_pim_manager"
+              sequence="45"/>
+</odoo>

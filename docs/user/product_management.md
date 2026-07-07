@@ -23,7 +23,38 @@ If the product template form is in read-only mode, the dynamic widget displays c
 
 ---
 
-## 2. Default Values Resolution
+## 2. PIM Workflow States, Locking, & Completeness
+
+The PIM module introduces product data quality and lifecycle management directly onto the product template form.
+
+### 2.1 PIM Lifecycle Stages
+Every product template cycles through three PIM stages:
+1. **Draft**: Initial catalog entry. Attributes and defaults are synced.
+2. **Enriching**: Operators and copywriters populate specification values, description, and images.
+3. **Approved**: The record is verified and ready for external feeds.
+
+### 2.2 Approved Edit Lock
+When a product's stage is transitioned to **Approved**, it is locked for editing:
+* The core fields (Name, Category, Description, Image) are locked.
+* The Specifications tab is locked; custom values cannot be edited or deleted.
+* To make modifications, an operator must transition the stage back to **Draft** or **Enriching** using the header buttons.
+
+### 2.3 Completeness Score
+The product template computes a real-time **Completeness Score (%)** based on:
+1. **Core Product Fields**: Presence of Name, Sales Description, Main Image, and a non-root Product Category.
+2. **Required Specifications**: Any custom attribute flagged as **Required** in attributes setup or sets configurations.
+
+> [!IMPORTANT]
+> You cannot approve a product unless its Completeness Score is exactly **100%**. Attempting to click **Approve Product** with missing required values will throw a validation error blocking the change.
+
+### 2.4 Digital Asset Management (DAM)
+Use the **Documents & Assets** tab on the product template sheet to manage digital attachments:
+* Click **Add a line** to link files, user manuals, high-res images, or external video URLs.
+* Select the **Asset Type** (User Manual, Product Datasheet, High-Res Image, Video Link, Other) to organize your files.
+
+---
+
+## 3. Default Values Resolution
 
 When a product category or template set is assigned, missing custom specification rows are created automatically. The system pre-fills these lines using defaults:
 
@@ -33,7 +64,7 @@ When a product category or template set is assigned, missing custom specificatio
 
 ---
 
-## 3. Extended Search & Filters
+## 4. Extended Search & Filters
 
 The system integrates custom attribute values directly into Odoo's standard search bar.
 
@@ -46,7 +77,7 @@ The system integrates custom attribute values directly into Odoo's standard sear
 
 ---
 
-## 4. Administrator Import Guide (CSV/Excel)
+## 5. Administrator Import Guide (CSV/Excel)
 
 Importing specification values onto products requires importing into the EAV lines model `product.template.custom.value` associated with the product template.
 

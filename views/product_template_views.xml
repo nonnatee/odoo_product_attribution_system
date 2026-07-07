@@ -6,6 +6,20 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_pim_enriching" string="Start Enriching" type="object" invisible="pim_state != 'draft'" class="oe_highlight"/>
+                    <button name="action_pim_approve" string="Approve Product" type="object" invisible="pim_state != 'enriching'" class="oe_highlight" groups="odoo_product_attribution_system.group_pim_manager"/>
+                    <button name="action_pim_draft" string="Reset to Draft" type="object" invisible="pim_state == 'draft'"/>
+                    <field name="pim_state" widget="statusbar" statusbar_visible="draft,enriching,approved"/>
+                </header>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_title')]" position="before">
+                <div class="oe_right oe_button_box" name="pim_completeness_box" style="float: right; margin-bottom: 10px;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">Completeness: <field name="pim_completeness" class="oe_inline"/>%</div>
+                    <widget name="web_ribbon" title="Approved" bg_color="text-bg-success" invisible="pim_state != 'approved'"/>
+                </div>
+            </xpath>
             <xpath expr="//notebook" position="inside">
                 <page string="Specifications" name="specifications">
                     <group>
@@ -17,6 +31,7 @@
                            domain="[('attribute_id', 'in', all_inherited_attribute_ids)]">
                         <list editable="bottom" create="0" delete="0">
                             <field name="attribute_id" readonly="1"/>
+                            <field name="is_required" column_invisible="True"/>
                             <field name="value_type" readonly="1" column_invisible="True"/>
                             <field name="display_value" widget="dynamic_attribute_value"/>
                             <field name="value_text" column_invisible="True"/>
@@ -25,6 +40,17 @@
                             <field name="value_date" column_invisible="True"/>
                             <field name="value_boolean" column_invisible="True"/>
                             <field name="value_selection_id" column_invisible="True"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Documents &amp; Assets" name="pim_assets">
+                    <field name="pim_asset_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="asset_type"/>
+                            <field name="attachment_id"/>
+                            <field name="video_url" placeholder="e.g. YouTube Link" invisible="asset_type != 'video'"/>
+                            <field name="description"/>
                         </list>
                     </field>
                 </page>

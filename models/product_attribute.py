@@ -12,3 +12,5 @@ class ProductAttribute(models.Model):
         ('boolean', 'Boolean'),
         ('selection', 'Selection'),
     ], string='Value Type', default='text', required=True)
+
+    is_required = fields.Boolean(string='Required Globally', default=False)

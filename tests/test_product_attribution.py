@@ -1490,4 +1490,200 @@ class TestProductAttribution(common.HttpCase):
         if hasattr(product, 'public_categ_ids'):
             self.assertNotIn(categ.public_categ_id, product.public_categ_ids)
 
->>>>>>> Stashed changes
+    def test_82_pim_completeness_calculation(self):
+        """Test PIM Completeness Score: dynamic composite calculations based on core & specs"""
+        attr_req = self.env['product.attribute'].create({
+            'name': 'Required Spec',
+            'value_type': 'integer',
+            'is_required': True,
+        })
+        
+        product = self.env['product.template'].create({
+            'name': 'Test PIM Template',
+            'description_sale': False,
+            'image_1920': False,
+        })
+        
+        self.assertEqual(product.pim_completeness, 20)
+        
+        product.write({'description_sale': 'A great description'})
+        self.assertEqual(product.pim_completeness, 40)
+        
+        line = product.custom_value_ids.filtered(lambda l: l.attribute_id == attr_req)
+        line.write({'value_integer': 120})
+        self.assertEqual(product.pim_completeness, 60)
+
+    def test_83_pim_workflow_locking(self):
+        """Test PIM Workflow: state transitions, lock conditions, and approval gates"""
+        product = self.env['product.template'].create({
+            'name': 'Lock Test Product',
+        })
+        
+        self.assertEqual(product.pim_state, 'draft')
+        
+        product.action_pim_enriching()
+        self.assertEqual(product.pim_state, 'enriching')
+        
+        with self.assertRaises(ValidationError):
+            product.action_pim_approve()
+            
+        categ_non_root = self.env['product.category'].create({'name': 'PIM Category'})
+        product.write({
+            'description_sale': 'Filled description',
+            'image_1920': b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            'categ_id': categ_non_root.id,
+        })
+        
+        self.assertEqual(product.pim_completeness, 100)
+        
+        product.action_pim_approve()
+        self.assertEqual(product.pim_state, 'approved')
+        
+        with self.assertRaises(ValidationError):
+            product.write({'name': 'Locked Change'})
+            
+        line = product.custom_value_ids[0] if product.custom_value_ids else False
+        if line:
+            with self.assertRaises(ValidationError):
+                line.write({'value_text': 'Locked specification edit'})
+                
+        product.action_pim_enriching()
+        self.assertEqual(product.pim_state, 'enriching')
+        product.write({'name': 'Unlocked Change'})
+        self.assertEqual(product.name, 'Unlocked Change')
+
+    def test_84_pim_assets_management(self):
+        """Test PIM Digital Asset Management: create and link attachments with types"""
+        product = self.env['product.template'].create({
+            'name': 'Asset Product',
+        })
+        
+        attachment = self.env['ir.attachment'].create({
+            'name': 'user_manual.pdf',
+            'type': 'binary',
+            'datas': b'UERGLWRvY3VtZW50LWNvbnRlbnQ=',
+        })
+        
+        asset = self.env['product.pim.asset'].create({
+            'name': 'Official User Manual',
+            'product_tmpl_id': product.id,
+            'asset_type': 'manual',
+            'attachment_id': attachment.id,
+            'description': 'Contains safety guidelines.',
+        })
+        
+        self.assertIn(asset, product.pim_asset_ids)
+        self.assertEqual(product.pim_asset_ids[0].attachment_id.name, 'user_manual.pdf')
+
+    def test_85_pim_feed_export_generation(self):
+        """Test PIM Feed Export: profile configuration, field mapping, and file download triggers"""
+        product = self.env['product.template'].create({
+            'name': 'Approved Export Product',
+            'description_sale': 'Details',
+            'image_1920': b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            'categ_id': self.env['product.category'].create({'name': 'Export Category'}).id,
+        })
+        product.action_pim_enriching()
+        product.action_pim_approve()
+        
+        profile = self.env['pim.export.profile'].create({
+            'name': 'Shopify Feed',
+            'export_format': 'csv',
+            'mapping_ids': [
+                (0, 0, {
+                    'target_header': 'Product Title',
+                    'source_type': 'field',
+                    'field_name': 'name',
+                }),
+                (0, 0, {
+                    'target_header': 'Description',
+                    'source_type': 'field',
+                    'field_name': 'description_sale',
+                })
+            ]
+        })
+        
+        action = profile.action_generate_export()
+        self.assertEqual(action.get('type'), 'ir.actions.act_url')
+        self.assertTrue(action.get('url').startswith('/web/content/'))
+
+    def test_86_pim_roles_and_approval_gates(self):
+        """Test PIM Roles: PIM Users/Operators cannot approve products, only Managers can"""
+        product = self.env['product.template'].create({
+            'name': 'Permission Test Product',
+        })
+        product.action_pim_enriching()
+        
+        group_operator = self.env.ref('odoo_product_attribution_system.group_pim_user')
+        user_operator = self.env['res.users'].create({
+            'name': 'PIM Operator',
+            'login': 'pim_operator',
+            'email': 'operator@pim.com',
+            'groups_id': [(6, 0, [group_operator.id])],
+        })
+        
+        with self.assertRaises(ValidationError):
+            product.with_user(user_operator).action_pim_approve()
+            
+        group_manager = self.env.ref('odoo_product_attribution_system.group_pim_manager')
+        user_manager = self.env['res.users'].create({
+            'name': 'PIM Manager',
+            'login': 'pim_manager',
+            'email': 'manager@pim.com',
+            'groups_id': [(6, 0, [group_manager.id])],
+        })
+        
+        categ = self.env['product.category'].create({'name': 'Complete Categ'})
+        product.write({
+            'description_sale': 'Fully complete info',
+            'image_1920': b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            'categ_id': categ.id,
+        })
+        
+        product.with_user(user_manager).action_pim_approve()
+        self.assertEqual(product.pim_state, 'approved')
+
+    def test_87_pim_settings_lock_bypass(self):
+        """Test PIM Settings: Lock Bypass allows PIM Managers to edit approved products"""
+        categ = self.env['product.category'].create({'name': 'Approved Categ'})
+        product = self.env['product.template'].create({
+            'name': 'Bypass Product',
+            'description_sale': 'Details',
+            'image_1920': b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            'categ_id': categ.id,
+        })
+        product.action_pim_enriching()
+        product.action_pim_approve()
+        self.assertEqual(product.pim_state, 'approved')
+        
+        group_operator = self.env.ref('odoo_product_attribution_system.group_pim_user')
+        user_operator = self.env['res.users'].create({
+            'name': 'Operator 2',
+            'login': 'operator_2',
+            'email': 'operator2@pim.com',
+            'groups_id': [(6, 0, [group_operator.id])],
+        })
+        
+        group_manager = self.env.ref('odoo_product_attribution_system.group_pim_manager')
+        user_manager = self.env['res.users'].create({
+            'name': 'Manager 2',
+            'login': 'manager_2',
+            'email': 'manager2@pim.com',
+            'groups_id': [(6, 0, [group_manager.id])],
+        })
+        
+        self.env['ir.config_parameter'].sudo().set_param('odoo_product_attribution_system.pim_lock_bypass', False)
+        
+        with self.assertRaises(ValidationError):
+            product.with_user(user_manager).write({'name': 'Manager Hack'})
+            
+        with self.assertRaises(ValidationError):
+            product.with_user(user_operator).write({'name': 'Operator Hack'})
+            
+        self.env['ir.config_parameter'].sudo().set_param('odoo_product_attribution_system.pim_lock_bypass', True)
+        
+        product.with_user(user_manager).write({'name': 'Manager Bypass Edit'})
+        self.assertEqual(product.name, 'Manager Bypass Edit')
+        
+        with self.assertRaises(ValidationError):
+            product.with_user(user_operator).write({'name': 'Operator Bypass Edit'})

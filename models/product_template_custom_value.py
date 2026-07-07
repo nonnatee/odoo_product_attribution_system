@@ -67,6 +67,22 @@ class ProductTemplateCustomValue(models.Model):
                     "The selection value must belong to the same attribute!"
                 )
 
+    def write(self, vals):
+        for rec in self:
+            if rec.product_tmpl_id._is_write_locked():
+                raise ValidationError(
+                    f"Product '{rec.product_tmpl_id.name}' is Approved and locked. Custom values cannot be modified."
+                )
+        return super().write(vals)
+
+    def unlink(self):
+        for rec in self:
+            if rec.product_tmpl_id._is_write_locked():
+                raise ValidationError(
+                    f"Product '{rec.product_tmpl_id.name}' is Approved and locked. Custom values cannot be deleted."
+                )
+        return super().unlink()
+
     @api.depends(
         'value_type', 'value_text', 'value_integer', 'value_float',
         'value_date', 'value_boolean', 'value_selection_id',
@@ -95,4 +111,44 @@ class ProductTemplateCustomValue(models.Model):
                 rec.is_inherited = rec.attribute_id in rec.product_tmpl_id.all_inherited_attribute_ids
             else:
                 rec.is_inherited = False
+
+    is_required = fields.Boolean(
+        string='Required',
+        compute='_compute_is_required',
+        store=False,
+    )
+
+    @api.depends('attribute_id', 'product_tmpl_id.attribute_set_ids', 'product_tmpl_id.categ_id')
+    def _compute_is_required(self):
+        for rec in self:
+            if rec.attribute_id.is_required:
+                rec.is_required = True
+                continue
+            
+            is_req = False
+            template = rec.product_tmpl_id
+            if template:
+                for set_rec in template.attribute_set_ids:
+                    line = set_rec.attribute_line_ids.filtered(lambda l: l.attribute_id == rec.attribute_id)
+                    if line and line[0].is_required:
+                        is_req = True
+                        break
+                
+                if not is_req and template.categ_id:
+                    visited = {template.categ_id.id}
+                    curr_categ = template.categ_id
+                    while curr_categ:
+                        for set_rec in curr_categ.attribute_set_ids:
+                            line = set_rec.attribute_line_ids.filtered(lambda l: l.attribute_id == rec.attribute_id)
+                            if line and line[0].is_required:
+                                is_req = True
+                                break
+                        if is_req:
+                            break
+                        curr_categ = curr_categ.parent_id
+                        if curr_categ and curr_categ.id in visited:
+                            break
+                        if curr_categ:
+                            visited.add(curr_categ.id)
+            rec.is_required = is_req
 

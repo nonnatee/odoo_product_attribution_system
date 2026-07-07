@@ -18,6 +18,7 @@
                             <field name="attribute_line_ids">
                                 <list editable="bottom">
                                     <field name="attribute_id"/>
+                                    <field name="is_required"/>
                                     <field name="value_type" column_invisible="True"/>
                                     <field name="display_value" widget="dynamic_attribute_value"/>
                                     <!-- Hidden EAV fields for OWL widget storage -->

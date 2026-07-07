@@ -41,6 +41,8 @@ class ProductAttributeSetLine(models.Model):
         string='Value Type',
     )
 
+    is_required = fields.Boolean(string='Required', default=False)
+
     # Default typed value fields
     value_text = fields.Text(string='Default Text Value')
     value_integer = fields.Integer(string='Default Integer Value')

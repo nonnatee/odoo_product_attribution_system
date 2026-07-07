@@ -19,6 +19,24 @@ class ProductTemplate(models.Model):
         string='Attribute Sets',
     )
 
+    pim_state = fields.Selection([
+        ('draft', 'Draft'),
+        ('enriching', 'Enriching'),
+        ('approved', 'Approved'),
+    ], string='PIM Stage', default='draft', required=True)
+
+    pim_completeness = fields.Integer(
+        string='Completeness Score (%)',
+        compute='_compute_pim_completeness',
+        store=False,
+    )
+
+    pim_asset_ids = fields.One2many(
+        'product.pim.asset',
+        'product_tmpl_id',
+        string='PIM Digital Assets',
+    )
+
     all_inherited_attribute_ids = fields.Many2many(
         'product.attribute',
         compute='_compute_all_inherited_attribute_ids',
@@ -34,6 +52,48 @@ class ProductTemplate(models.Model):
             if template.attribute_set_ids:
                 attrs |= template.attribute_set_ids.mapped('attribute_line_ids.attribute_id')
             template.all_inherited_attribute_ids = attrs
+
+    @api.depends(
+        'name', 'description_sale', 'image_1920', 'categ_id',
+        'custom_value_ids.is_required', 'custom_value_ids.value_text',
+        'custom_value_ids.value_integer', 'custom_value_ids.value_float',
+        'custom_value_ids.value_date', 'custom_value_ids.value_boolean',
+        'custom_value_ids.value_selection_id'
+    )
+    def _compute_pim_completeness(self):
+        for template in self:
+            total = 4
+            filled = 0
+            if template.name:
+                filled += 1
+            if template.description_sale:
+                filled += 1
+            if template.image_1920:
+                filled += 1
+            if template.categ_id and template.categ_id != self.env.ref('product.product_category_all', raise_if_not_found=False):
+                filled += 1
+            
+            required_lines = template.custom_value_ids.filtered(lambda l: l.is_required)
+            for line in required_lines:
+                total += 1
+                is_line_filled = False
+                if line.value_type == 'text' and line.value_text:
+                    is_line_filled = True
+                elif line.value_type == 'integer' and line.value_integer:
+                    is_line_filled = True
+                elif line.value_type == 'float' and line.value_float:
+                    is_line_filled = True
+                elif line.value_type == 'date' and line.value_date:
+                    is_line_filled = True
+                elif line.value_type == 'boolean':
+                    is_line_filled = True
+                elif line.value_type == 'selection' and line.value_selection_id:
+                    is_line_filled = True
+                
+                if is_line_filled:
+                    filled += 1
+            
+            template.pim_completeness = int((filled / total) * 100) if total > 0 else 100
 
     def _get_attribute_default_value(self, attribute):
         """Resolves default value for a given attribute based on template sets and category sets hierarchy."""
@@ -135,24 +195,58 @@ class ProductTemplate(models.Model):
     def create(self, vals_list):
         templates = super().create(vals_list)
         templates._sync_custom_values()
-<<<<<<< Updated upstream
-=======
-        templates._evaluate_set_value_rules()
         templates._sync_external_product_categories()
->>>>>>> Stashed changes
         return templates
 
+    def _is_write_locked(self):
+        self.ensure_one()
+        if self.pim_state != 'approved':
+            return False
+        
+        bypass_enabled = self.env['ir.config_parameter'].sudo().get_param('odoo_product_attribution_system.pim_lock_bypass')
+        if bypass_enabled:
+            is_manager = self.env.user.has_group('odoo_product_attribution_system.group_pim_manager')
+            if is_manager:
+                return False
+        return True
+
     def write(self, vals):
+        # Enforce PIM workflow edit lock on Approved state
+        from odoo.exceptions import ValidationError
+        if 'pim_state' not in vals:
+            for rec in self:
+                if rec._is_write_locked():
+                    raise ValidationError(
+                        f"Product '{rec.name}' is in 'Approved' state and locked for editing. "
+                        "Please transition back to 'Enriching' to modify specifications."
+                    )
         res = super().write(vals)
         if any(f in vals for f in ('categ_id', 'attribute_set_ids')):
             self._sync_custom_values()
-<<<<<<< Updated upstream
-=======
-            self._evaluate_set_value_rules()
         if 'categ_id' in vals:
             self._sync_external_product_categories()
->>>>>>> Stashed changes
         return res
+
+    def action_pim_draft(self):
+        for rec in self:
+            rec.write({'pim_state': 'draft'})
+
+    def action_pim_enriching(self):
+        for rec in self:
+            rec.write({'pim_state': 'enriching'})
+
+    def action_pim_approve(self):
+        from odoo.exceptions import ValidationError
+        if not self.env.user.has_group('odoo_product_attribution_system.group_pim_manager'):
+            raise ValidationError("Only PIM Managers are authorized to approve product specifications.")
+
+        for rec in self:
+            if rec.pim_completeness < 100:
+                raise ValidationError(
+                    f"Cannot approve '{rec.name}'. The product completeness score is only {rec.pim_completeness}%. "
+                    "Please fill all required core fields and specifications before approving."
+                )
+            rec.write({'pim_state': 'approved'})
 
     def _sync_external_product_categories(self):
         for template in self:

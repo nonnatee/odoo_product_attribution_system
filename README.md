@@ -49,6 +49,25 @@ A professional and robust Odoo module implementing a dynamic, category-based att
   - **Readonly**: Automatically disables editing on target EAV widgets.
   - **Set Value**: Overwrites and forces a predefined target value instantly in the web client record cache.
 
+### 8. Product Data Completeness Score
+- Dynamically computes a composite **Completeness Score (%)** on product templates.
+- Evaluates core fields (Name, Description, Main Image, Product Category) and custom attributes flagged as **Required**.
+- Renders a visually clean completeness indicator inside the product sheet header.
+
+### 9. Product Lifecycle Workflow & Stage Locking
+- Introduces lifecycle workflow states: **Draft**, **Enriching**, and **Approved**.
+- Restricts editing permissions: when in the **Approved** stage, product information and custom specifications are locked as read-only.
+- Safe gates: prevents transitioning a product to **Approved** unless its Completeness Score is exactly 100%.
+
+### 10. Digital Asset Management (DAM)
+- Dedicated **Documents & Assets** tab on the product template sheet.
+- Supports storing and classifying attachments (User Manuals, Datasheets, High-Res Images, Video Links) with descriptions.
+
+### 11. Multi-Channel Export Profiles
+- Create custom **Export Profiles** to generate external channel feeds.
+- Supports mapping standard fields and custom EAV specifications to custom CSV or JSON structures.
+- Generates and delivers download action files for all templates in the **Approved** stage.
+
 ---
 
 ## 📖 Documentation
@@ -58,8 +77,9 @@ Detailed documentation is organized as follows:
 ### 👤 User & Configuration Guides
 * **[User Guide Index](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user_guide.md)**: Main entry point for administrators and operators.
 * **[Attributes & Sets Setup](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/attributes_and_sets.md)**: Managing attributes, value types, sets, and CSV imports.
-* **[Category Configuration](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/category_configuration.md)**: Linking attributes to categories, inheritance, and imports.
-* **[Product Template Management](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/product_management.md)**: Editing product specs tab, widget usages, and search filterings.
+* **[Category Configuration](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/category_configuration.md)**: Linking attributes to categories, inheritance, channel unification sync, and imports.
+* **[Product Template Management](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/user/product_management.md)**: Editing product specs tab, widget usages, lifecycle workflow locking, and search filterings.
+* **[4-Tiers Hands-On Tutorial](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/docs/tutorial.md)**: Configuration guide walk-through covering custom attributes, categories, channel sync, PIM validation, and multi-channel feeds.
 
 ### 💻 Developer & Technical Documentation
 * **[Technical Documentation Index](file:///c:/Users/nonna/Dev/repository/odoo_product_attribution_system/TECHNICAL_DOCUMENTATION.md)**: System design and high-level architecture diagram.

@@ -19,7 +19,9 @@ To define new specifications for your product catalog, you first create **Produc
    * **Date**: For dates (e.g. warranty start, release calendar).
    * **Boolean**: A Yes/No flag (displays as a checkbox).
    * **Selection**: A closed dropdown list. Values must be predefined in the *Attribute Values* sub-tab at the bottom.
-5. Click **Save**.
+5. Set the **Required Globally** checkbox:
+   * If enabled, this attribute must be populated on *any* product template that inherits it (across all categories and sets), contributing to the PIM Completeness Score.
+6. Click **Save**.
 
 ---
 
@@ -33,8 +35,10 @@ To define new specifications for your product catalog, you first create **Produc
 3. Enter the **Name** of the set (e.g., *Kitchen Appliance Specs*).
 4. Click **Add a line** in the *Attributes* table.
 5. Select the **Attribute**. The system will automatically display its **Value Type**.
-6. Set the **Default Value** in the appropriate type-specific column (e.g., enter `12` in the *Default Integer Value* column for a warranty attribute, or check the box for a boolean attribute).
-7. Save the record.
+6. Set the **Default Value** in the appropriate type-specific column.
+7. Toggle the **Required** checkbox on the set line:
+   * If enabled, this attribute will be required *only* for products that inherit this specific set (rather than globally).
+8. Save the record.
 
 ---
 

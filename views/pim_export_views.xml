@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Export Profile Form View -->
+    <record id="pim_export_profile_view_form" model="ir.ui.view">
+        <field name="name">pim.export.profile.form</field>
+        <field name="model">pim.export.profile</field>
+        <field name="arch" type="xml">
+            <form string="PIM Export Profile">
+                <header>
+                    <button name="action_generate_export" string="Generate Feed &amp; Download" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Shopify Export Feed"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="export_format"/>
+                    </group>
+                    <notebook>
+                        <page string="Field Mappings" name="mappings">
+                            <field name="mapping_ids">
+                                <list editable="bottom">
+                                    <field name="target_header"/>
+                                    <field name="source_type"/>
+                                    <field name="field_name" invisible="source_type != 'field'"/>
+                                    <field name="attribute_id" invisible="source_type != 'attribute'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Export Profile List View -->
+    <record id="pim_export_profile_view_tree" model="ir.ui.view">
+        <field name="name">pim.export.profile.list</field>
+        <field name="model">pim.export.profile</field>
+        <field name="arch" type="xml">
+            <list string="PIM Export Profiles">
+                <field name="name"/>
+                <field name="export_format"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Export Profile Action -->
+    <record id="pim_export_profile_action" model="ir.actions.act_window">
+        <field name="name">PIM Export Profiles</field>
+        <field name="res_model">pim.export.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Export Profile Menu -->
+    <menuitem id="menu_pim_export_profile_action"
+              action="pim_export_profile_action"
+              parent="sale.menu_product_attribute_action"
+              sequence="30"/>
+</odoo>

@@ -11,6 +11,16 @@
                     <field name="attribute_set_ids" widget="many2many_tags" options="{'no_create': True}"/>
                     <field name="all_inherited_attribute_ids" widget="many2many_tags" readonly="1"/>
                 </group>
+                <group name="external_channels_sync" string="Category Channel Synchronization">
+                    <group>
+                        <field name="sync_to_pos"/>
+                        <field name="pos_categ_id" invisible="not sync_to_pos"/>
+                    </group>
+                    <group>
+                        <field name="sync_to_website"/>
+                        <field name="public_categ_id" invisible="not sync_to_website"/>
+                    </group>
+                </group>
             </xpath>
         </field>
     </record>

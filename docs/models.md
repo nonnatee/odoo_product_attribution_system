@@ -38,10 +38,14 @@ Detailed lines within a set specifying defaults per attribute.
 * **`display_value`** (`fields.Char`): Computed string representation of the active default value (used in lists and search).
 
 ### 1.4 `product.category` (Inherited)
-Links categories to attributes and sets.
+Links categories to attributes and sets, and handles channel synchronization.
 * **`attribute_ids`** (`fields.Many2many`): Direct category attributes.
 * **`attribute_set_ids`** (`fields.Many2many`): Direct category sets.
 * **`all_inherited_attribute_ids`** (`fields.Many2many`): Dynamically computed aggregation of direct and parent-category attributes.
+* **`sync_to_pos`** (`fields.Boolean`): Enables replication of this category and its parent relationships to Point of Sale categories.
+* **`sync_to_website`** (`fields.Boolean`): Enables replication of this category and its parent relationships to eCommerce/Website public categories.
+* **`pos_categ_id`** (`fields.Many2one` pointing to `'pos.category'`): Directly tracks the corresponding POS category link.
+* **`public_categ_id`** (`fields.Many2one` pointing to `'product.public.category'`): Directly tracks the corresponding eCommerce category link.
 
 ### 1.5 `product.template` (Inherited)
 Integrates specifications grid and set configurations on product templates.

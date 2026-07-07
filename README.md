@@ -6,10 +6,12 @@ A professional and robust Odoo module implementing a dynamic, category-based att
 
 ## 🚀 Features
 
-### 1. Recursive Category-Based Attribute Inheritance
+### 1. Recursive Category-Based Attribute Inheritance & Channel Unification
 - Assign attributes directly or group them inside **Attribute Sets** for any Product Category.
 - Categories recursively inherit attributes from their parent hierarchy (supporting deep nesting of multiple levels).
 - Automatically prevents duplicate attribute inheritance and circular dependencies.
+- Synchronizes standard categories with **POS Categories** (`pos.category`) and **Website/eCommerce categories** (`product.public.category`) via simple configuration toggles.
+- Automatically assigns and updates product POS and website categories when a product's standard category is modified.
 
 ### 2. Product Attribute Sets & Default Values
 - Define reusable groups of attributes as an **Attribute Set**.
@@ -38,6 +40,14 @@ A professional and robust Odoo module implementing a dynamic, category-based att
 
 ### 6. Extended Search Filtering
 - Filter products dynamically in the search view by custom attribute name and custom attribute values.
+
+### 7. Product Configurator & Conditional Rules
+- Define conditional rules directly inside an Attribute Set (under the *Rules* sub-tab).
+- Evaluate dependency triggers using equals comparisons (selection options, boolean states, string text matching).
+- Execute dynamic target actions:
+  - **Hide**: Dynamically hides the target attribute row from the Specifications grid list view using CSS warning decorations.
+  - **Readonly**: Automatically disables editing on target EAV widgets.
+  - **Set Value**: Overwrites and forces a predefined target value instantly in the web client record cache.
 
 ---
 

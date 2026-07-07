@@ -52,7 +52,24 @@ When a category's attributes or sets are updated, the changes cascade down to pr
 
 ---
 
-## 4. Administrator Import Guide (CSV/Excel)
+## 4. Category Channel Unification (POS & eCommerce)
+
+To maintain a unified catalog across different sales channels, the system supports synchronizing standard product categories (`product.category`) with Point of Sale categories (`pos.category`) and Website public categories (`product.public.category`).
+
+### Configuration Options
+In any product category form view, the **Category Channel Synchronization** section contains two toggles:
+* **Sync to POS**: When enabled, creates a matching `pos.category` record.
+* **Sync to eCommerce**: When enabled, creates a matching `product.public.category` record.
+
+### Key Synchronization Rules:
+* **Hierarchy Replication**: The system automatically replicates the parent-child relationships. If a child standard category is synced and its parent standard category is also synced, the child POS/eCommerce category parent link will point directly to the parent POS/eCommerce category.
+* **Dynamic Updates**: Modifying a category name or changing its parent hierarchy instantly updates the mapped POS and Website records.
+* **Safe Cleanup**: Unchecking the sync options or deleting the standard category record automatically unlinks and deletes the corresponding POS and eCommerce categories to keep catalog channels clean.
+* **Product Association Auto-Sync**: When you assign a product template to a synchronized standard category, Odoo automatically maps the product to the matching POS category and adds it to the eCommerce website public categories.
+
+---
+
+## 5. Administrator Import Guide (CSV/Excel)
 
 To import category configurations linked to attributes and sets:
 

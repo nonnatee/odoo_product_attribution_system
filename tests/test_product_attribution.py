@@ -1615,7 +1615,7 @@ class TestProductAttribution(common.HttpCase):
             'name': 'PIM Operator',
             'login': 'pim_operator',
             'email': 'operator@pim.com',
-            'groups_id': [(6, 0, [group_operator.id])],
+            'group_ids': [(6, 0, [group_operator.id])],
         })
         
         with self.assertRaises(ValidationError):
@@ -1626,7 +1626,7 @@ class TestProductAttribution(common.HttpCase):
             'name': 'PIM Manager',
             'login': 'pim_manager',
             'email': 'manager@pim.com',
-            'groups_id': [(6, 0, [group_manager.id])],
+            'group_ids': [(6, 0, [group_manager.id])],
         })
         
         categ = self.env['product.category'].create({'name': 'Complete Categ'})
@@ -1657,7 +1657,7 @@ class TestProductAttribution(common.HttpCase):
             'name': 'Operator 2',
             'login': 'operator_2',
             'email': 'operator2@pim.com',
-            'groups_id': [(6, 0, [group_operator.id])],
+            'group_ids': [(6, 0, [group_operator.id])],
         })
         
         group_manager = self.env.ref('odoo_product_attribution_system.group_pim_manager')
@@ -1665,7 +1665,7 @@ class TestProductAttribution(common.HttpCase):
             'name': 'Manager 2',
             'login': 'manager_2',
             'email': 'manager2@pim.com',
-            'groups_id': [(6, 0, [group_manager.id])],
+            'group_ids': [(6, 0, [group_manager.id])],
         })
         
         self.env['ir.config_parameter'].sudo().set_param('odoo_product_attribution_system.pim_lock_bypass', False)

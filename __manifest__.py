@@ -7,7 +7,7 @@
     'description': """
         Milestone 1: Category-Based Attribute Inheritance & Hybrid EAV models.
     """,
-    'depends': ['product', 'sale'],
+    'depends': ['product', 'sale', 'point_of_sale', 'website_sale'],
     'data': [
         'security/security_groups.xml',
         'security/ir.model.access.csv',
@@ -18,7 +18,6 @@
         'views/pim_export_views.xml',
         'views/res_config_settings_views.xml',
     ],
-    'application': True,
     'assets': {
         'web.assets_backend': [
             'odoo_product_attribution_system/static/src/css/product_attribution.css',
@@ -30,6 +29,6 @@
         'data/demo_data.xml',
     ],
     'installable': True,
-    'application': False,
+    'application': True,
     'license': 'LGPL-3',
 }
